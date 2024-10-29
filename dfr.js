@@ -42,13 +42,13 @@ function dataDimensions(dataframe) {
   }
 }
 
-// Find the total of all valid numbers in a 1D array
+// Return the total of all valid numbers in a 1D array
 function findTotal(dataset) {
   let total = 0;
   try {
     dataset.forEach(element => {
-      if ((typeof element === 'number' || typeof element === 'string') && validNumber(element) === true) {
-        total = total + Number(element);
+      if ((typeof element === 'number' || typeof element === 'string') && validNumber(element)) {
+        total += Number(element);
       }
     });
     return total;
