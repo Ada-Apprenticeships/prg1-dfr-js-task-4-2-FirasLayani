@@ -34,10 +34,9 @@ function testInputs(funcName, arrayInputs, expectedOutputs) {
   console.table(results, ['Input', 'Output', 'Passed']);
 }
 
-// refactor by removing variable assignment
+// Validate whether value is a valid number or not
 function validNumber(value) {
-  numberRegex = /^-?[0-9]+(\.[0-9]+)?$/;
-  return numberRegex.test(String(value));
+  return /^-?[0-9]+(\.[0-9]+)?$/.test(String(value));
 }
 
 // put iterator in for loop
@@ -72,11 +71,6 @@ const expectedOutputs = [
 
 // Assuming dataDimensions is your function to test
 testInputs(dataDimensions, inputs, expectedOutputs);
-
-
-
-
-
 
 function findTotal(dataset) {}
 
