@@ -57,21 +57,29 @@ function findTotal(dataset) {
   }
 }
 
-function calculateMean(dataset) {
-  let numValues = 0;
+// Return the number of valid numbers in a 1D array
+function findNumNumbers(dataset) {
   try {
+    let numValues = 0;
     dataset.forEach(element => {
       if ((typeof element === 'number' || typeof element === 'string') && validNumber(element)) {
         numValues += 1;
       }
     });
-    return numValues === 0 ? 0 : findTotal(dataset) / numValues;
+    return numValues;
   } catch {
     return 0;
   }
 }
 
-testInputs(calculateMean, [[1, 2, 3]], [2]);
+// Return the mean of all valid numbers in a 1D array
+function calculateMean(dataset) {
+  try {
+    return findNumNumbers(dataset) === 0 ? 0 : findTotal(dataset) / findNumNumbers(dataset);
+  } catch {
+    return 0;
+  }
+}
 
 function calculateMedian(dataset) {}
 
