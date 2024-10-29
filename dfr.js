@@ -10,8 +10,7 @@ function testInputs(funcName, arrayInputs, expectedOutputs) {
     let passed;
     try {
       output = funcName(input);
-      passed =
-        JSON.stringify(output) === JSON.stringify(expectedOutputs[index]);
+      passed = JSON.stringify(output) === JSON.stringify(expectedOutputs[index]);
     } catch (error) {
       output = `Error: ${error.message}`;
       passed = false;
@@ -32,13 +31,12 @@ function validNumber(value) {
   return /^-?[0-9]+(\.[0-9]+)?$/.test(String(value));
 }
 
-// Return the number of rows and columns of a dataframe
+// Returns [rows, columns] of a 2D array or [-1, -1] if input is invalid
 function dataDimensions(dataframe) {
   try {
-    return [
-      dataframe.length,
-      dataframe[0].length === undefined ? -1 : dataframe[0].length,
-    ];
+    const rows = dataframe.length;
+    const columns = dataframe[0].length === undefined ? -1 : dataframe[0].length;
+    return [rows, columns];
   } catch {
     return [-1, -1];
   }
