@@ -46,28 +46,49 @@ function validNumber(value) {
 }
 
 // Return number of rows and columns of a dataframe
+// function dataDimensions(dataframe) {
+//   let rows = 0;
+//   let columns = 0;
+//   try {
+//     for (let i = 0; i < dataframe.length; i++) {
+//       rows += 1;
+//       for (let j = 0; j < dataframe[i].length; j++) {
+//         if (i === 0) {
+//           columns += 1;
+//         }
+//       }
+//     }
+//     if (columns === 0) {
+//       columns = -1;
+//     }
+//     if (rows === 0) {
+//       rows = -1;
+//     }
+//     return [rows, columns];
+//   } catch {
+//     return [-1, -1];
+//   }
+// }
+
+// Return number of rows and columns of a dataframe
 function dataDimensions(dataframe) {
   let rows = 0;
   let columns = 0;
   try {
-    for (let i = 0; i < dataframe.length; i++) {
-      rows += 1;
-      for (let j = 0; j < dataframe[i].length; j++) {
-        if (i === 0) {
-          columns += 1;
-        }
+    dataframe.forEach((row, index) => {
+      rows++;
+      try {
+        row.forEach(element => {
+          columns += index === 1 ? 1 : 0;
+        });
+      } catch {
+        columns = -1;
       }
-    }
-    if (columns === 0) {
-      columns = -1;
-    }
-    if (rows === 0) {
-      rows = -1;
-    }
-    return [rows, columns];
+    });
   } catch {
     return [-1, -1];
   }
+  return [dataframe.length, columns];
 }
 
 // Testing
@@ -77,19 +98,18 @@ const inputs = [
     ['Q1', 1000, 1200, 950],
     ['Q2', 1100, 1300, 975],
     ['Q3', 1200, 1400, 1000],
-  ], // salesData
-  [1000, 1100], // Single-dimensional array
+  ],
+  [1000, 1100],
   undefined,
   '', // No data
 ];
 const expectedOutputs = [
-  [3, 4], // Corresponding to salesData
-  [2, -1], // Corresponding to a dataset with 2 elements
-  [-1, -1], // Corresponding to no data
+  [3, 4],
+  [2, -1],
+  [-1, -1],
   [-1, -1],
 ];
 
-// Assuming dataDimensions is your function to test
 testInputs(dataDimensions, inputs, expectedOutputs);
 
 function findTotal(dataset) {}
