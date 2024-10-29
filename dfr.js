@@ -57,20 +57,21 @@ function findTotal(dataset) {
   }
 }
 
-testInputs(
-  findTotal,
-  [
-    [1, 2, 3],
-    [1500.5, 1900.25, '2000.00', 1750.75, 'pending'],
-    [[100], [200]],
-    [[1500.5]],
-    '',
-    [1500.5, 1900.25, 'invalid', 1750.75],
-  ],
-  [6, 7151.5, 0, 0, 0, 5151.5]
-);
+function calculateMean(dataset) {
+  let numValues = 0;
+  try {
+    dataset.forEach(element => {
+      if ((typeof element === 'number' || typeof element === 'string') && validNumber(element)) {
+        numValues += 1;
+      }
+    });
+    return numValues === 0 ? 0 : findTotal(dataset) / numValues;
+  } catch {
+    return 0;
+  }
+}
 
-function calculateMean(dataset) {}
+testInputs(calculateMean, [[1, 2, 3]], [2]);
 
 function calculateMedian(dataset) {}
 
