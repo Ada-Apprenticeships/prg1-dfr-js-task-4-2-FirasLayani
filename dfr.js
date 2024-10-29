@@ -81,7 +81,16 @@ function calculateMean(dataset) {
   }
 }
 
-function calculateMedian(dataset) {}
+// Return the median of valid numbers in a 1D array
+function calculateMedian(dataset) {
+  // odd --> (n+1)/2
+  // even --> (n/2 + (n/2 +1))/2
+  const numValues = findNumNumbers(dataset);
+  return numValues;
+}
+
+const testData = [1.5, 1.9, 10.0, 50, -10, '3', '1'];
+console.log(calculateMedian(testData));
 
 function convertToNumber(dataframe, col) {}
 
