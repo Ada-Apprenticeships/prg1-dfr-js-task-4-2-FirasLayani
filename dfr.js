@@ -42,28 +42,33 @@ function dataDimensions(dataframe) {
   }
 }
 
-// Testing
+// Find the total of all valid numbers in a 1D array
+function findTotal(dataset) {
+  let total = 0;
+  try {
+    dataset.forEach(element => {
+      if ((typeof element === 'number' || typeof element === 'string') && validNumber(element) === true) {
+        total = total + Number(element);
+      }
+    });
+    return total;
+  } catch {
+    return 0;
+  }
+}
 
-const inputs = [
+testInputs(
+  findTotal,
   [
-    ['Q1', 1000, 1200, 950],
-    ['Q2', 1100, 1300, 975],
-    ['Q3', 1200, 1400, 1000],
+    [1, 2, 3],
+    [1500.5, 1900.25, '2000.00', 1750.75, 'pending'],
+    [[100], [200]],
+    [[1500.5]],
+    '',
+    [1500.5, 1900.25, 'invalid', 1750.75],
   ],
-  [1000, 1100],
-  undefined,
-  '', // No data
-];
-const expectedOutputs = [
-  [3, 4],
-  [2, -1],
-  [-1, -1],
-  [-1, -1],
-];
-
-testInputs(dataDimensions, inputs, expectedOutputs);
-
-function findTotal(dataset) {}
+  [6, 7151.5, 0, 0, 0, 5151.5]
+);
 
 function calculateMean(dataset) {}
 
