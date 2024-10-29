@@ -4,19 +4,6 @@ function fileExists(filename) {
   return fs.existsSync(filename);
 }
 
-/*
-function testInputs(funcName, arrayInputs) {
-  console.log(`Testing function ${funcName.name}()`);
-  for (const input of arrayInputs) {
-    try {
-      console.log(`Input ${input} --> ${funcName(input)}`);
-    } catch (error) {
-      console.log(`Input ${input} had error: ${error.message}`);
-    }
-  }
-}
-*/
-
 function testInputs(funcName, arrayInputs, expectedOutputs) {
   const results = arrayInputs.map((input, index) => {
     let output;
@@ -40,55 +27,21 @@ function testInputs(funcName, arrayInputs, expectedOutputs) {
   console.table(results, ['Input', 'Output', 'Expected', 'Passed']);
 }
 
-// Validate whether value is a valid number or not
+// Validate whether a value is a valid number or not
 function validNumber(value) {
   return /^-?[0-9]+(\.[0-9]+)?$/.test(String(value));
 }
 
-// Return number of rows and columns of a dataframe
-// function dataDimensions(dataframe) {
-//   let rows = 0;
-//   let columns = 0;
-//   try {
-//     for (let i = 0; i < dataframe.length; i++) {
-//       rows += 1;
-//       for (let j = 0; j < dataframe[i].length; j++) {
-//         if (i === 0) {
-//           columns += 1;
-//         }
-//       }
-//     }
-//     if (columns === 0) {
-//       columns = -1;
-//     }
-//     if (rows === 0) {
-//       rows = -1;
-//     }
-//     return [rows, columns];
-//   } catch {
-//     return [-1, -1];
-//   }
-// }
-
-// Return number of rows and columns of a dataframe
+// Return the number of rows and columns of a dataframe
 function dataDimensions(dataframe) {
-  let rows = 0;
-  let columns = 0;
   try {
-    dataframe.forEach((row, index) => {
-      rows++;
-      try {
-        row.forEach(element => {
-          columns += index === 1 ? 1 : 0;
-        });
-      } catch {
-        columns = -1;
-      }
-    });
+    return [
+      dataframe.length,
+      dataframe[0].length === undefined ? -1 : dataframe[0].length,
+    ];
   } catch {
     return [-1, -1];
   }
-  return [dataframe.length, columns];
 }
 
 // Testing
