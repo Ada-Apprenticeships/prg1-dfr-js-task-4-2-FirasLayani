@@ -83,14 +83,42 @@ function calculateMean(dataset) {
 
 // Return the median of valid numbers in a 1D array
 function calculateMedian(dataset) {
+  let validDataset = [];
+  try {
+    // Filter to valid numbers
+    dataset.forEach(element => {
+      if ((typeof element === 'number' || typeof element === 'string') && validNumber(element)) {
+        validDataset.push(Number(element));
+      }
+    });
+  } catch {
+    return 0;
+  }
+
+  // Sort to ascending numbers
+  const sortedDataset = validDataset.sort();
+
+  // Apply median formula
   // odd --> (n+1)/2
   // even --> (n/2 + (n/2 +1))/2
-  const numValues = findNumNumbers(dataset);
-  return numValues;
+  const numValues = findNumNumbers(dataset); // Number of valid numbers in the dataset
+  if (numValues === 0) {
+    return 0;
+  } else if (numValues % 2 === 0) {
+    return (sortedDataset[numValues / 2 - 1] + sortedDataset[numValues / 2]) / 2;
+  } else if (numValues % 2 === 1) {
+    return sortedDataset[(numValues + 1) / 2 - 1];
+  } else {
+    return 0;
+  }
 }
+console.log(calculateMedian(''));
 
-const testData = [1.5, 1.9, 10.0, 50, -10, '3', '1'];
-console.log(calculateMedian(testData));
+testInputs(
+  calculateMedian,
+  [[1.5, 1.9, 10.0, 50, -10, '3', '1'], [2, 3, 1], [4, 2, 3, 1], [], [''], ''],
+  [1.9, 2, 2.5, 0, 0, 0]
+);
 
 function convertToNumber(dataframe, col) {}
 
