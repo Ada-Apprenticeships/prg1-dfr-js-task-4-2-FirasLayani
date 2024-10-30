@@ -46,7 +46,7 @@ function dataDimensions(dataframe) {
 function findTotal(dataset) {
   let total = 0;
   try {
-    dataset.forEach((element) => {
+    dataset.forEach(element => {
       // Ensure only numbers or numeric strings are included as valid numbers. Ignore arrays such as [1] to prevent auto-casting to a string in validNumber()
       if ((typeof element === 'number' || typeof element === 'string') && validNumber(element)) {
         total += Number(element);
@@ -62,7 +62,7 @@ function findTotal(dataset) {
 function findNumNumbers(dataset) {
   try {
     let numValues = 0;
-    dataset.forEach((element) => {
+    dataset.forEach(element => {
       // Ensure only numbers or numeric strings are included as valid numbers. Ignore arrays such as [1] to prevent auto-casting to a string in validNumber()
       if ((typeof element === 'number' || typeof element === 'string') && validNumber(element)) {
         numValues++;
@@ -91,7 +91,7 @@ function calculateMedian(dataset) {
 
   // Filter dataset to contain only valid numbers
   let validDataset = [];
-  dataset.forEach((element) => {
+  dataset.forEach(element => {
     // Ensure only numbers or numeric strings are included as valid numbers. Ignore arrays such as [1] to prevent auto-casting to a string in validNumber()
     if ((typeof element === 'number' || typeof element === 'string') && validNumber(element)) {
       validDataset.push(Number(element));
@@ -127,7 +127,22 @@ function convertToNumber(dataframe, col) {
   return numConverted;
 }
 
-function flatten(dataframe) {}
+function flatten(dataframe) {
+  // Check if dataframe is single-column
+  for (let i = 0; i < dataframe.length; i++) {
+    if (dataframe[i].length !== 1 || !Array.isArray(dataframe[i])) {
+      return [];
+    }
+  }
+  let newDataframe = []
+  dataframe.forEach(array => {
+    newDataframe.push(array[0])
+  })
+  return newDataframe
+}
+
+let validDataframe = [[23.5], [25.1], [24.8], ['Hello'], ['yo','yo2']];
+console.log(flatten(validDataframe));
 
 function loadCSV(csvFile, ignoreRows, ignoreCols) {}
 
