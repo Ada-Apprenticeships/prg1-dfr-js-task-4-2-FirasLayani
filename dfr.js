@@ -127,22 +127,18 @@ function convertToNumber(dataframe, col) {
   return numConverted;
 }
 
+// Convert a single-column dataframe into a dataset
 function flatten(dataframe) {
   // Check if dataframe is single-column
   for (let i = 0; i < dataframe.length; i++) {
-    if (dataframe[i].length !== 1 || !Array.isArray(dataframe[i])) {
+    if (!Array.isArray(dataframe[i]) || dataframe[i].length !== 1) {
+      // If any sub-array is invalid i.e. not in form [element], return an empty array 
       return [];
     }
   }
-  let newDataframe = []
-  dataframe.forEach(array => {
-    newDataframe.push(array[0])
-  })
-  return newDataframe
+  // Return an array containing the first element from each sub-array
+  return dataframe.map(array => array[0]);
 }
-
-let validDataframe = [[23.5], [25.1], [24.8], ['Hello'], ['yo','yo2']];
-console.log(flatten(validDataframe));
 
 function loadCSV(csvFile, ignoreRows, ignoreCols) {}
 
