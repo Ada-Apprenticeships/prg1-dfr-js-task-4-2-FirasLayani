@@ -114,24 +114,34 @@ function calculateMedian(dataset) {
       sortedDataset[(numValues + 1) / 2 - 1];
 }
 
-testInputs(
-  calculateMedian,
-  [
-    [1.5, 1.9, 10.0, 50, -10, '3', '1'],
-    [2, 3, 1],
-    [4, 2, 3, 1],
-    [],
-    [''],
-    '',
-    [1, 10, 2],
-    [[1, 2]],
-    [[1], [2]],
-    [[1], [1, 2]],
-  ],
-  [1.9, 2, 2.5, 0, 0, 0, 2, 0, 0, 0]
-);
+// Convert all string numbers
+function convertToNumber(dataframe, col) {
+  let numConverted = 0;
+  for (let i = 0; i < dataframe.length; i++) {
+    for (let j = 0; j < dataframe[i].length; j++) {
+      if (Number(dataframe[i][j]) && j === col) {
+        dataframe[i][j] = Number(dataframe[i][j]);
+        numConverted++;
+      }
+    }
+  }
+  return numConverted;
+}
 
-function convertToNumber(dataframe, col) {}
+const trafficData = [
+  ['protocol', 'requests', 'latency'], // Column indices: 0, 1, 2
+  ['tcp', '1000', '2.5'], //                ↓  ↓  ↓
+  ['udp', '1500', '1.8'], //                0  1  2
+];
+
+console.log(convertToNumber(trafficData, 1)); // → 2 (converted '1000' and '1500' to numbers)
+
+console.log(trafficData);
+
+// Convert string numbers in 'latency' column (index 2)
+console.log(convertToNumber(trafficData, 2)); // → 2 (converted '2.5' and '1.8' to numbers)
+
+console.log(trafficData);
 
 function flatten(dataframe) {}
 
