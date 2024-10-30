@@ -46,7 +46,7 @@ function dataDimensions(dataframe) {
 function findTotal(dataset) {
   let total = 0;
   try {
-    dataset.forEach(element => {
+    dataset.forEach((element) => {
       // Ensure only numbers or numeric strings are included as valid numbers. Ignore arrays such as [1] to prevent auto-casting to a string in validNumber()
       if ((typeof element === 'number' || typeof element === 'string') && validNumber(element)) {
         total += Number(element);
@@ -62,7 +62,7 @@ function findTotal(dataset) {
 function findNumNumbers(dataset) {
   try {
     let numValues = 0;
-    dataset.forEach(element => {
+    dataset.forEach((element) => {
       // Ensure only numbers or numeric strings are included as valid numbers. Ignore arrays such as [1] to prevent auto-casting to a string in validNumber()
       if ((typeof element === 'number' || typeof element === 'string') && validNumber(element)) {
         numValues++;
@@ -91,7 +91,7 @@ function calculateMedian(dataset) {
 
   // Filter dataset to contain only valid numbers
   let validDataset = [];
-  dataset.forEach(element => {
+  dataset.forEach((element) => {
     // Ensure only numbers or numeric strings are included as valid numbers. Ignore arrays such as [1] to prevent auto-casting to a string in validNumber()
     if ((typeof element === 'number' || typeof element === 'string') && validNumber(element)) {
       validDataset.push(Number(element));
@@ -108,40 +108,24 @@ function calculateMedian(dataset) {
   }
 
   return numValues % 2 === 0
-    ? // Even number of values
+    ? // Return median for even number of values
       (sortedDataset[numValues / 2 - 1] + sortedDataset[numValues / 2]) / 2
-    : // Odd number of values
+    : // Return median for odd number of values
       sortedDataset[(numValues + 1) / 2 - 1];
 }
 
-// Convert all string numbers
+// Convert all string numbers to actual numbers in a specified column
 function convertToNumber(dataframe, col) {
   let numConverted = 0;
-  for (let i = 0; i < dataframe.length; i++) {
-    for (let j = 0; j < dataframe[i].length; j++) {
-      if (Number(dataframe[i][j]) && j === col) {
-        dataframe[i][j] = Number(dataframe[i][j]);
-        numConverted++;
-      }
+  // Iterate through each row
+  for (let row of dataframe) {
+    if (validNumber(row[col])) {
+      row[col] = Number(row[col]); // If the element as a number is valid, cast it to a Number
+      numConverted++;
     }
   }
   return numConverted;
 }
-
-const trafficData = [
-  ['protocol', 'requests', 'latency'], // Column indices: 0, 1, 2
-  ['tcp', '1000', '2.5'], //                ↓  ↓  ↓
-  ['udp', '1500', '1.8'], //                0  1  2
-];
-
-console.log(convertToNumber(trafficData, 1)); // → 2 (converted '1000' and '1500' to numbers)
-
-console.log(trafficData);
-
-// Convert string numbers in 'latency' column (index 2)
-console.log(convertToNumber(trafficData, 2)); // → 2 (converted '2.5' and '1.8' to numbers)
-
-console.log(trafficData);
 
 function flatten(dataframe) {}
 
