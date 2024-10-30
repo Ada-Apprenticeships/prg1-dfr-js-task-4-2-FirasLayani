@@ -47,6 +47,7 @@ function findTotal(dataset) {
   let total = 0;
   try {
     dataset.forEach(element => {
+      // Ensure only numbers or numeric strings are included as valid numbers. Ignore arrays such as [1] to prevent auto-casting to a string in validNumber()
       if ((typeof element === 'number' || typeof element === 'string') && validNumber(element)) {
         total += Number(element);
       }
@@ -62,8 +63,9 @@ function findNumNumbers(dataset) {
   try {
     let numValues = 0;
     dataset.forEach(element => {
+      // Ensure only numbers or numeric strings are included as valid numbers. Ignore arrays such as [1] to prevent auto-casting to a string in validNumber()
       if ((typeof element === 'number' || typeof element === 'string') && validNumber(element)) {
-        numValues += 1;
+        numValues++;
       }
     });
     return numValues;
@@ -83,41 +85,50 @@ function calculateMean(dataset) {
 
 // Return the median of valid numbers in a 1D array
 function calculateMedian(dataset) {
-  let validDataset = [];
-  try {
-    // Filter to valid numbers
-    dataset.forEach(element => {
-      if ((typeof element === 'number' || typeof element === 'string') && validNumber(element)) {
-        validDataset.push(Number(element));
-      }
-    });
-  } catch {
+  if (!Array.isArray(dataset)) {
     return 0;
   }
 
-  // Sort to ascending numbers
-  const sortedDataset = validDataset.sort();
+  // Filter dataset to contain only valid numbers
+  let validDataset = [];
+  dataset.forEach(element => {
+    // Ensure only numbers or numeric strings are included as valid numbers. Ignore arrays such as [1] to prevent auto-casting to a string in validNumber()
+    if ((typeof element === 'number' || typeof element === 'string') && validNumber(element)) {
+      validDataset.push(Number(element));
+    }
+  });
 
-  // Apply median formula
-  // odd --> (n+1)/2
-  // even --> (n/2 + (n/2 +1))/2
-  const numValues = findNumNumbers(dataset); // Number of valid numbers in the dataset
+  // Sort valid dataset in ascending order
+  const sortedDataset = validDataset.sort((a, b) => a - b);
+  const numValues = validDataset.length;
+
+  // Return 0 if no valid numbers are found
   if (numValues === 0) {
     return 0;
-  } else if (numValues % 2 === 0) {
-    return (sortedDataset[numValues / 2 - 1] + sortedDataset[numValues / 2]) / 2;
-  } else if (numValues % 2 === 1) {
-    return sortedDataset[(numValues + 1) / 2 - 1];
-  } else {
-    return 0;
   }
+
+  return numValues % 2 === 0
+    ? // Even number of values
+      (sortedDataset[numValues / 2 - 1] + sortedDataset[numValues / 2]) / 2
+    : // Odd number of values
+      sortedDataset[(numValues + 1) / 2 - 1];
 }
-console.log(calculateMedian(''));
 
 testInputs(
   calculateMedian,
-  [[1.5, 1.9, 10.0, 50, -10, '3', '1'], [2, 3, 1], [4, 2, 3, 1], [], [''], ''],
-  [1.9, 2, 2.5, 0, 0, 0]
+  [
+    [1.5, 1.9, 10.0, 50, -10, '3', '1'],
+    [2, 3, 1],
+    [4, 2, 3, 1],
+    [],
+    [''],
+    '',
+    [1, 10, 2],
+    [[1, 2]],
+    [[1], [2]],
+    [[1], [1, 2]],
+  ],
+  [1.9, 2, 2.5, 0, 0, 0, 2, 0, 0, 0]
 );
 
 function convertToNumber(dataframe, col) {}
