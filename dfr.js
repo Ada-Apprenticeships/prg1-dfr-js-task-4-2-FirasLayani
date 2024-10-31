@@ -141,30 +141,43 @@ function flatten(dataframe) {
 }
 
 function loadCSV(csvFile, ignoreRows, ignoreCols) {
-  if (!fileExists(csvFile)) {
+  // Ensure loaded file exists and ignored rows/columns are in array format
+  if (!fileExists(csvFile) || !Array.isArray(ignoreRows) || !Array.isArray(ignoreCols)) {
     return [[], -1, -1];
   }
-  let data = fs.readFileSync(csvFile, 'utf-8');
-  let lines = data.split(/\n/); // Array of lines in file
-  console.log(lines)
-  const rows = lines.length;
-  let columns = lines[0].split(',').length;
-  // Find delimiter to split by above
 
-  let newDataframe = [];
-  for (let i = 0; i < lines.length; i++) {
-    if (!ignoreRows.includes(i)) {
-      let newLine = [];
-      for (let j = 0; j < lines[i].split(',').length; j++) {
-        if (!ignoreCols.includes(j)) {
-          newLine.push(lines[i].split(',')[j]);
-        }
-      }
-      newDataframe.push(newLine);
-    }
+  // Read in the file and remove any whitespace
+  const data = fs.readFileSync(csvFile, 'utf-8').trim();
+
+  // Return an empty array if there is no data in the CSV file
+  if (!data) {
+    return [[], -1, -1];
   }
 
-  return [newDataframe, rows, columns];
+  const lines = data.split(/\n/); // An array of lines in the file
+  const rows = lines.length;
+  const columns = lines[0].split(',').length;
+  let newDataFrame = [];
+
+  // Iterate through each line in the file
+  lines.forEach((line, rowIndex) => {
+    // If the line's index is not included in the row indexes to ignore
+    if (!ignoreRows.includes(rowIndex)) {
+      // Create a new line
+      let newLine = [];
+      // Iterate through each element in the line
+      line.split(',').forEach((element, colIndex) => {
+        // If this element's index is not included in the column indexes to ignore
+        if (!ignoreCols.includes(colIndex)) {
+          // Push the element to the new line
+          newLine.push(element);
+        }
+      });
+      // Push each new line to the new dataframe
+      newDataFrame.push(newLine);
+    }
+  });
+  return [newDataFrame, rows, columns];
 }
 
 console.log(loadCSV('sales_data.csv', [0], [1]));
