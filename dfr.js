@@ -1,3 +1,4 @@
+const { log } = require('console');
 const fs = require('fs');
 
 function fileExists(filename) {
@@ -140,7 +141,8 @@ function flatten(dataframe) {
   return dataframe.map(array => array[0]);
 }
 
-function loadCSV(csvFile, ignoreRows, ignoreCols) {
+// Read in a CSV file and return it with specified rows and columns to remove
+function loadCSV(csvFile, ignoreRows = [], ignoreCols = []) {
   // Ensure loaded file exists and ignored rows/columns are in array format
   if (!fileExists(csvFile) || !Array.isArray(ignoreRows) || !Array.isArray(ignoreCols)) {
     return [[], -1, -1];
@@ -180,9 +182,28 @@ function loadCSV(csvFile, ignoreRows, ignoreCols) {
   return [newDataFrame, rows, columns];
 }
 
-console.log(loadCSV('sales_data.csv', [0], [1]));
+function createSlice(dataframe, columnIndex, pattern, exportColumns = []) {
+  // Check if dataframe is a valid 2D array
+  if (dataDimensions(dataframe).includes(-1)) {
+    return [];
+  }
 
-function createSlice(dataframe, columnIndex, pattern, exportColumns = []) {}
+  let newDataFrame = [];
+  dataframe.forEach(line => {
+    if (line[columnIndex].includes(pattern) || pattern === '*') {
+      let newLine = [];
+      line.forEach((element, columnIndex) => {
+        if (exportColumns.includes(columnIndex)) {
+          newLine.push(element);
+        }
+      });
+      newDataFrame.push(newLine);
+    }
+  });
+  return newDataFrame;
+}
+
+console.log(createSlice([1]));
 
 module.exports = {
   fileExists,
