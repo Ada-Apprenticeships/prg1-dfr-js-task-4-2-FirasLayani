@@ -132,7 +132,7 @@ function flatten(dataframe) {
   // Check if dataframe is single-column
   for (let i = 0; i < dataframe.length; i++) {
     if (!Array.isArray(dataframe[i]) || dataframe[i].length !== 1) {
-      // If any sub-array is invalid i.e. not in form [element], return an empty array 
+      // If any sub-array is invalid i.e. not in form [element], return an empty array
       return [];
     }
   }
@@ -140,7 +140,34 @@ function flatten(dataframe) {
   return dataframe.map(array => array[0]);
 }
 
-function loadCSV(csvFile, ignoreRows, ignoreCols) {}
+function loadCSV(csvFile, ignoreRows, ignoreCols) {
+  if (!fileExists(csvFile)) {
+    return [[], -1, -1];
+  }
+  let data = fs.readFileSync(csvFile, 'utf-8');
+  let lines = data.split(/\n/); // Array of lines in file
+  console.log(lines)
+  const rows = lines.length;
+  let columns = lines[0].split(',').length;
+  // Find delimiter to split by above
+
+  let newDataframe = [];
+  for (let i = 0; i < lines.length; i++) {
+    if (!ignoreRows.includes(i)) {
+      let newLine = [];
+      for (let j = 0; j < lines[i].split(',').length; j++) {
+        if (!ignoreCols.includes(j)) {
+          newLine.push(lines[i].split(',')[j]);
+        }
+      }
+      newDataframe.push(newLine);
+    }
+  }
+
+  return [newDataframe, rows, columns];
+}
+
+console.log(loadCSV('sales_data.csv', [0], [1]));
 
 function createSlice(dataframe, columnIndex, pattern, exportColumns = []) {}
 
