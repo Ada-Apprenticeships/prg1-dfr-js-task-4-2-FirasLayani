@@ -1,30 +1,8 @@
-const { log } = require('console');
 const fs = require('fs');
 
+// Check if a file exists at the specified path
 function fileExists(filename) {
   return fs.existsSync(filename);
-}
-
-function testInputs(funcName, arrayInputs, expectedOutputs) {
-  const results = arrayInputs.map((input, index) => {
-    let output;
-    let passed;
-    try {
-      output = funcName(input);
-      passed = JSON.stringify(output) === JSON.stringify(expectedOutputs[index]);
-    } catch (error) {
-      output = `Error: ${error.message}`;
-      passed = false;
-    }
-    return {
-      Input: input,
-      Output: output,
-      Expected: expectedOutputs[index],
-      Passed: passed,
-    };
-  });
-
-  console.table(results, ['Input', 'Output', 'Expected', 'Passed']);
 }
 
 // Validate whether a value is a valid number or not
@@ -182,6 +160,7 @@ function loadCSV(csvFile, ignoreRows = [], ignoreCols = []) {
   return [newDataFrame, rows, columns];
 }
 
+// Return a filtered dataframe with rows containing a specified value in a given column
 function createSlice(dataframe, columnIndex, pattern, exportColumns = []) {
   // Check if dataframe is a valid 2D array
   if (dataDimensions(dataframe).includes(-1)) {
@@ -189,21 +168,26 @@ function createSlice(dataframe, columnIndex, pattern, exportColumns = []) {
   }
 
   let newDataFrame = [];
+  // For each row in the dataframe
   dataframe.forEach(line => {
-    if (line[columnIndex].includes(pattern) || pattern === '*') {
+    // If the row contains the desired element in the given column ('*' matches any value)
+    if (line[columnIndex] === pattern || pattern === '*') {
+      // Create an array for the new row
       let newLine = [];
+      // Iterate through each element in the existing row
       line.forEach((element, columnIndex) => {
-        if (exportColumns.includes(columnIndex)) {
+        // If the element's index is included in the column indexes to export
+        if (exportColumns.includes(columnIndex) || exportColumns.length === 0) {
+          // Push the element to the new line
           newLine.push(element);
         }
       });
+      // Push each new line to the new dataframe
       newDataFrame.push(newLine);
     }
   });
   return newDataFrame;
 }
-
-console.log(createSlice([1]));
 
 module.exports = {
   fileExists,
